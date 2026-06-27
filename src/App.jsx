@@ -115,7 +115,9 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+        <script type="module" src="main.js"></script>
     </>
+      
   )
 }
 
