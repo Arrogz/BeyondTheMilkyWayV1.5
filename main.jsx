@@ -4,7 +4,6 @@ import {updateSpaceship, killSpaceship, resetSpaceship} from "./movement.jsx";
 import {animateHyperspace} from "./hyperspace.jsx";
 import {updateControls} from "./controls.jsx";
 import {updateChunks} from "./galaxy.jsx";
-//import {OrbitControls} from "/build/controls/OrbitControls.js";
 import { OutlineEffect } from "/build/effects/OutlineEffect.js";
 import {updateHUD} from "./boosterHud.jsx";
 import {hyperspaceAnimate} from "./asteroid.jsx";

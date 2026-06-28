@@ -1,6 +1,6 @@
 import * as THREE from "/build/three.module.js";
 import {camera, spaceship} from "./setup.jsx";
-import {isHyperJump} from "./src/main.jsx";
+import {isHyperJump} from "./main.jsx";
 import * as PARTICLE from "./rocketBooster.jsx";
 import {shipBoostColor, updateBooster} from "./rocketBooster.jsx";
 
