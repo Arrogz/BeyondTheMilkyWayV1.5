@@ -1,4 +1,4 @@
-import {asteroids} from "./asteroid.js";
+import {asteroids} from "./asteroid.jsx";
 
 const shipRadius = 3;
 

@@ -1,16 +1,16 @@
 import * as THREE from "/build/three.module.js";
-import {scene, renderer, camera, spaceship, setScene, setSceneLighting, setSceneElements} from "./setup.js";
-import {updateSpaceship, killSpaceship, resetSpaceship} from "./movement.js";
-import {animateHyperspace} from "./hyperspace.js";
-import {updateControls} from "./controls.js";
-import {updateChunks} from "./galaxy.js";
+import {scene, renderer, camera, spaceship, setScene, setSceneLighting, setSceneElements} from "./setup.jsx";
+import {updateSpaceship, killSpaceship, resetSpaceship} from "./movement.jsx";
+import {animateHyperspace} from "./hyperspace.jsx";
+import {updateControls} from "./controls.jsx";
+import {updateChunks} from "./galaxy.jsx";
 //import {OrbitControls} from "/build/controls/OrbitControls.js";
 import { OutlineEffect } from "/build/effects/OutlineEffect.js";
-import {updateHUD} from "./boosterHud.js";
-import {hyperspaceAnimate} from "./asteroid.js";
-import {startRace, updateRace} from "./raceGame.js";
-import {checkForCollisions} from "./collision.js";
-import { setupMenus, showMenu, hideMenu, isMenuOpen, setupMenuButtons } from './menu.js';
+import {updateHUD} from "./boosterHud.jsx";
+import {hyperspaceAnimate} from "./asteroid.jsx";
+import {startRace, updateRace} from "./raceGame.jsx";
+import {checkForCollisions} from "./collision.jsx";
+import { setupMenus, showMenu, hideMenu, isMenuOpen, setupMenuButtons } from './menu.jsx';
 
 
 const clock = new THREE.Clock();

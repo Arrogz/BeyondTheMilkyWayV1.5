@@ -1,6 +1,6 @@
 import * as THREE from './build/three.module.js';
-import * as MOVEMENT from './movement.js';
-import {isHyperJump} from "./src/main.jsx";
+import * as MOVEMENT from './movement.jsx';
+import {isHyperJump} from "./main.jsx";
 
 const keybinds = Object.freeze({
     BRAKE : 'KeyS',

@@ -1,5 +1,5 @@
 import * as THREE from './build/three.module.js';
-import {scene, camera} from "./setup.js";
+import {scene, camera} from "./setup.jsx";
 
 let isPlaying = false;
 

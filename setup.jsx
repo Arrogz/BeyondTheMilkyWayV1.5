@@ -1,8 +1,8 @@
 import * as THREE from "/build/three.module.js";
 // import {OBJLoader} from "/build/loaders/OBJLoader.js";
-import {createShip} from "./ship.js";
-import {createAsteroidField} from "./asteroid.js";
-import {setupRaceUI} from "./raceGame.js";
+import {createShip} from "./ship.jsx";
+import {createAsteroidField} from "./asteroid.jsx";
+import {setupRaceUI} from "./raceGame.jsx";
 
 export let scene;
 export let camera;

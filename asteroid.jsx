@@ -1,6 +1,6 @@
 import * as THREE from "/build/three.module.js";
-import {scene} from "./setup.js";
-import {lerp} from "./setup.js";
+import {scene} from "./setup.jsx";
+import {lerp} from "./setup.jsx";
 
 let asteroid;
 export const asteroids = [];

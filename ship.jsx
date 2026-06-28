@@ -1,7 +1,7 @@
 import * as THREE from "./build/three.module.js";
-import {scene} from "./setup.js";
+import {scene} from "./setup.jsx";
 import {OBJLoader} from "/build/loaders/OBJLoader.js";
-import {initBooster} from "./rocketBooster.js";
+import {initBooster} from "./rocketBooster.jsx";
 
 
 async function loadOBJ(modelName) {

@@ -1,6 +1,6 @@
 import * as THREE from "./build/three.module.js";
-import {lerp} from "./setup.js";
-import {isHyperJump} from "./src/main.jsx";
+import {lerp} from "./setup.jsx";
+import {isHyperJump} from "./main.jsx";
 const CHUNK_SIZE = 1000;
 const chunks = new Map();
 export function getChunkCoord(position) {

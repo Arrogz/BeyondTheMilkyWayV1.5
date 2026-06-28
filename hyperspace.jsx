@@ -1,7 +1,7 @@
 import * as THREE from '/build/three.module.js';
-import {lerp} from "./setup.js"
-import {isHyperJump} from "./src/main.jsx";
-import {cube, cubes, scene} from "./setup.js";
+import {lerp} from "./setup.jsx"
+import {isHyperJump} from "./main.jsx";
+import {cube, cubes, scene} from "./setup.jsx";
 const loader = new THREE.CubeTextureLoader();
 
 let cubeX = 0.1, cubeY = 0.1, cubeZ = 0.1;

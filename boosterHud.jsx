@@ -1,4 +1,4 @@
-import { getBoostFuel, getMaxFuel, getOnCooldown } from './movement.js';
+import { getBoostFuel, getMaxFuel, getOnCooldown } from './movement.jsx';
 
 const fuelBarFill = document.getElementById('fuel-bar-fill');
 const fuelLabel = document.getElementById('fuel-label');
