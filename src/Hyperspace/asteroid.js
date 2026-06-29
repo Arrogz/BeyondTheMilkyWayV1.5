@@ -1,23 +1,24 @@
 import * as THREE from "/build/three.module.js";
-import {scene} from "./setup.jsx";
-import {lerp} from "./setup.jsx";
+import {scene} from "./setup.js";
 
 let asteroid;
-export const asteroids = [];
+const SPEED = 0.1;
+const CLOCK = new THREE.Clock();
+const asteroids = [];
 
-export function createAsteroidField(count = 100, bounds = new THREE.Vector3(200, 200, 200), offset =  new THREE.Vector3(200, 200, 200)) {
+export function createAsteroidField(count = 100, bounds = new THREE.Vector3(200, 200, 200)) {
     const material = createAsteroidMaterial();
 
     const velocityRange = 5;
 
     for (let i = 0; i < count; i++) {
-        const radius = randomRange(1, 20);
+        const radius = randomRange(1, 10);
         asteroid = createAsteroid(material, radius);
 
         asteroid.position.set(
-            (Math.random() - 0.5) * bounds.x + offset.x,
-            (Math.random() - 0.5) * bounds.y + offset.y,
-            (Math.random() - 0.5) * bounds.z + offset.z
+            (Math.random() - 0.5) * bounds.x,
+            (Math.random() - 0.5) * bounds.y,
+            (Math.random() - 0.5) * bounds.z
         );
 
         asteroids.push({
@@ -32,6 +33,7 @@ export function createAsteroidField(count = 100, bounds = new THREE.Vector3(200,
         scene.add(asteroid);
     }
 
+    asteroids[0].flatShading = false;
 }
 
 
@@ -85,12 +87,6 @@ function createAsteroidMaterial() {
 
         roughness: 1,
 
-        flatShading: false,
-
-        transparent: true,
-
-        opacity: 1,
-
     });
 
 }
@@ -118,8 +114,8 @@ function createAsteroid(material, radius = 5, detail = 5) {
         x:          Math.random() * 10,
         y:          Math.random() * 10,
         z:          Math.random() * 10,
-        frequency:  5 + Math.random(), // how often bumps occur
-        amplitude:  0.3 + Math.random() * 0.35 // how large bumps are
+        frequency:  3 + Math.random(), // how often bumps occur
+        amplitude:  0.15 + Math.random() * 0.35 // how large bumps are
     }
 
     const scaleX = 0.8 + Math.random() * 0.8;
@@ -175,16 +171,67 @@ function createAsteroid(material, radius = 5, detail = 5) {
 function randomRange(min, max) {
     return Math.random() * (max - min) + min;
 }
-export function hyperspaceAnimate(isHyperspace){
-    //console.log(asteroids[1].mesh);
+
+export function animateAsteroids() {
+    const delta = Math.min(CLOCK.getDelta(), 0.05);
+
+
+    // VERY VERY INEFFICIENT working on O(n^2)
+    // need to implement a physics library
+
     for (let i = 0; i < asteroids.length; i++) {
-        let asteroid = asteroids[i];
-        //console.log(asteroid.mesh.material.opacity);
-        if(isHyperspace) {
-            asteroid.mesh.material.opacity = lerp(asteroid.mesh.material.opacity, 0, 0.001);
-        }
-        else {
-            asteroid.mesh.material.opacity = lerp(asteroid.mesh.material.opacity, 1, 0.00005);
+        const asteroid = asteroids[i];
+
+        asteroid.mesh.rotation.y += delta * SPEED;
+        asteroid.mesh.rotation.x += delta * SPEED * 0.5;
+
+        asteroid.mesh.position.add(
+            asteroid.velocity.clone().multiplyScalar(delta)
+        );
+
+        for (let j = i + 1; j < asteroids.length; j++) {
+
+            const a = asteroids[i];
+            const b = asteroids[j];
+
+            const distance =
+                a.mesh.position.distanceTo(b.mesh.position);
+
+            const minDistance =
+                a.radius + b.radius;
+
+            if (distance < minDistance) {
+
+                handleCollision(a, b);
+            }
         }
     }
+}
+
+
+function handleCollision(a, b) {
+
+    // Direction between asteroids
+    const normal = new THREE.Vector3()
+        .subVectors(b.mesh.position, a.mesh.position)
+        .normalize();
+
+    // Swap velocities (simple elastic collision)
+    const temp = a.velocity.clone();
+
+    a.velocity.copy(b.velocity);
+    b.velocity.copy(temp);
+
+    // Push them apart so they don't stick
+    const overlap =
+        (a.radius + b.radius) -
+        a.mesh.position.distanceTo(b.mesh.position);
+
+    a.mesh.position.add(
+        normal.clone().multiplyScalar(-overlap * 0.5)
+    );
+
+    b.mesh.position.add(
+        normal.clone().multiplyScalar(overlap * 0.5)
+    );
 }
