@@ -1,7 +1,8 @@
 import * as THREE from '/build/three.module.js';
 import {lerp} from "./setup.js"
-import {isHyperJump, spaceship} from "./main.js";
-import {cube, cubes} from "./setup.js";
+import {isHyperJump} from "./main.js";
+import {cube, cubes, scene} from "./setup.js";
+const loader = new THREE.CubeTextureLoader();
 
 let cubeX = 0.1, cubeY = 0.1, cubeZ = 0.1;
 let cubeSize = {
@@ -20,14 +21,18 @@ let cubeSpeed = {
 
 let phase = 0;
 let speed = 0.01;
-
-export function animateHyperspace(camera){
+let worldId = 0;
+export function animateHyperspace(camera, spaceship){
     if(!isHyperJump) phase = 0;
     else if(phase == 0) phase = 1;
+
+    //console.log(camera.fov);
 
     switch(phase){
         case 1:
             cube.material.opacity = lerp(cube.material.opacity, 1,0.01);
+            spaceship.children[0].material.opacity = lerp(spaceship.children[0].material.opacity, 1,0.01);
+            if( spaceship.children[0].material.opacity > 0.7) spaceship.children[0].material.transparent = false;
             if(cube.material.opacity < 0.9)
                 for(let i = 0;i < cubes.length; i++){
                     cubes[i].position.z+=speed;
@@ -59,6 +64,15 @@ export function animateHyperspace(camera){
             cubeZ = lerp(cubeZ, cubeSize.maxZ, 0.01);
             speed = lerp(speed, cubeSpeed.maxSpeed, 0.05);
 
+            worldId = Math.floor(Math.random() * 6);
+            let skyTexture = loader.load([
+                `/image/skybox/${worldId}/right.png`, `/image/skybox/${worldId}/left.png`,
+                `/image/skybox/${worldId}/top.png`,    `/image/skybox/${worldId}/bottom.png`,
+                `/image/skybox/${worldId}/front.png`, `/image/skybox/${worldId}/back.png`
+            ]);
+            scene.background = skyTexture;
+
+            console.log(worldId);
             for(let i = 0;i < cubes.length; i++){
                 cubes[i].scale.set(cubeX,cubeY,cubeZ);
                 cubes[i].position.z+=speed;
@@ -70,6 +84,7 @@ export function animateHyperspace(camera){
                 camera.updateProjectionMatrix();
             }
             break;
+
 
         case 0:
             cubeX = lerp(cubeX, cubeSize.minX, 0.01);
@@ -91,6 +106,8 @@ export function animateHyperspace(camera){
             camera.fov = lerp(camera.fov, 35, 0.0005);
             camera.updateProjectionMatrix();
             cube.material.opacity = lerp(cube.material.opacity, 0,0.007);
+            spaceship.children[0].material.opacity = lerp(spaceship.children[0].material.opacity, 0,0.01);
+            spaceship.children[0].material.transparent = true;
             break;
     }
 }

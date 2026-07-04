@@ -1,22 +1,40 @@
 import * as THREE from "/build/three.module.js";
-import {scene, renderer, camera, setScene, setSceneLighting, setSceneElements, createShip} from "./setup.js";
-import {updateSpaceship} from "./movement.js";
+import {scene, renderer, camera, spaceship, setScene, setSceneLighting, setSceneElements} from "./setup.js";
+import {updateSpaceship, killSpaceship, resetSpaceship} from "./movement.js";
 import {animateHyperspace} from "./hyperspace.js";
-import {createAsteroidField, animateAsteroids} from "./asteroid.js";
+import {updateControls} from "./controls.js";
+import {updateChunks} from "./galaxy.js";
 //import {OrbitControls} from "/build/controls/OrbitControls.js";
 import { OutlineEffect } from "/build/effects/OutlineEffect.js";
+import {updateHUD} from "./boosterHud.js";
+import {hyperspaceAnimate} from "./asteroid.js";
+import {startRace, updateRace} from "./raceGame.js";
+import {checkForCollisions} from "./collision.js";
+import { setupMenus, showMenu, hideMenu, isMenuOpen, setupMenuButtons } from './menu.js';
+
+
 const clock = new THREE.Clock();
 export let isHyperJump = false;
 
 setScene();
 setSceneLighting();
+await setSceneElements();
 
-export const spaceship = await createShip();
-const spaceshipDummy = await createShip();
+setupMenus();
+setupMenuButtons({
+    onResume: () => {
+        togglePause();
+    },
+    onStart: () => {
+        togglePause();
+        startRace();
+    },
+    onRetry: () => {
+        hideMenu('retry');
+        resetSpaceship();
+    }
+});
 
-setSceneElements();
-
-createAsteroidField(1000, new THREE.Vector3(1000, 1000, 1000));
 
 //const controls = new OrbitControls(camera, renderer.domElement);
 const effect = new OutlineEffect(renderer, {
@@ -26,6 +44,8 @@ const effect = new OutlineEffect(renderer, {
     defaultKeepAlive: true
 });
 
+let animationId = null;
+let isPaused = false;
 
 
 const mouse = new THREE.Vector2();
@@ -40,26 +60,63 @@ function onKeyDown(event) {
     if(event.key== "f") {
         isHyperJump = !isHyperJump;
     }
+    if (event.key === "Escape") {
+        togglePause();
+    }
 }
 
-function animate() {
-    //controls.update()
 
-    requestAnimationFrame(animate);
+function togglePause() {
+    if (isMenuOpen('retry')) return;
+    isPaused = !isPaused;
+
+
+    if (isPaused) {
+        showMenu('pause');
+        cancelAnimationFrame(animationId);
+    }
+    else {
+        hideMenu('pause');
+        clock.getDelta(); // resets clocks last time called to current time.
+        animate()
+    }
+}
+
+
+
+export function animate() {
+    //controls.update()
+    if (isPaused) return;
+
+    animationId = requestAnimationFrame(animate);
 
     const deltaTime = clock.getDelta();
 
-    updateSpaceship(spaceship, deltaTime, keys, mouse);
+    updateHUD();
 
-    animateHyperspace(camera);
+    updateControls(deltaTime, keys);
 
-    animateAsteroids();
+    updateSpaceship(spaceship, deltaTime, mouse);
+
+    checkForCollisions(spaceship, () => {
+        killSpaceship();
+        showMenu('retry');
+    });
+
+    animateHyperspace(camera, spaceship);
+
+    updateChunks(spaceship, scene);
+
+    hyperspaceAnimate(isHyperJump);
+
+    updateRace(spaceship, deltaTime);
 
     renderer.render(scene, camera);
     //console.log(isHyperJump);
 
     //console.log(camera.rotation.x);
 }
+
 
 animate();
 window.addEventListener('keydown', onKeyDown);

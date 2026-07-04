@@ -14,6 +14,78 @@
             color: oklch(0.9 0 90);
             font-size: 0.8rem;
         }
+        #hud {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        #fuel-bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        #fuel-label {
+            color: #00ffff;
+            font-family: monospace;
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        #fuel-bar-bg {
+            width: 300px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        #fuel-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: #00ffff;
+            transition: width 0.05s linear, background 0.3s;
+            border-radius: 2px;
+        }
+
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        .menu button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #best-time {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: #00ffff;
+            font-family: monospace;
+            font-size: 20px;
+            letter-spacing: 2px;
+            pointer-events: none;
+            z-index: 100;
+        }
+
     </style>
 </head>
 
@@ -21,7 +93,26 @@
 <header>
 </header>
 <main>
+
     <div class="render-view">
+        <div id="hud">
+            <div id="fuel-bar-container">
+                <div id="fuel-label">BOOSTER</div>
+                <div id="fuel-bar-bg">
+                    <div id="fuel-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+        <div id="pause-menu" class="menu"  style="display: none;">
+            <h2>Game Paused</h2>
+            <button id="start-button">Start Race</button>
+            <button id="resume-button">Resume</button>
+        </div>
+        <div id="best-time">BEST: --</div>
+        <div id="retry-menu" class="menu" style="display: none;">
+            <h2>You crashed!</h2>
+            <button id="retry-button">Retry</button>
+        </div>
     </div>
 </main>
 
