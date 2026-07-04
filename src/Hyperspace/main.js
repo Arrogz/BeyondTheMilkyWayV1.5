@@ -1,14 +1,16 @@
 import * as THREE from "/build/three.module.js";
+import { useEffect, useRef } from "react";
 import {scene, renderer, camera, setScene, setSceneLighting, setSceneElements, createShip} from "./setup.js";
 import {updateSpaceship} from "./movement.js";
 import {animateHyperspace} from "./hyperspace.js";
 import {createAsteroidField, animateAsteroids} from "./asteroid.js";
 //import {OrbitControls} from "/build/controls/OrbitControls.js";
-import { OutlineEffect } from "/build/effects/OutlineEffect.js";
+import { OutlineEffect } from "three/addons/effects/OutlineEffect.js";
 const clock = new THREE.Clock();
 export let isHyperJump = false;
 
-setScene();
+const renderViewRef = useRef(null);
+setScene(renderViewRef.current);
 setSceneLighting();
 
 export const spaceship = await createShip();
